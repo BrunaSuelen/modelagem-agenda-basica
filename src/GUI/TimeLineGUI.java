@@ -1,12 +1,16 @@
 package GUI;
 
+//import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
 import DAOs.TaskDAO;
 
 import classes.*;
+import java.awt.Color;
 import java.awt.GridLayout;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class TimeLineGUI extends JFrame {
   static TaskDAO dp = new TaskDAO();
@@ -26,16 +30,25 @@ public class TimeLineGUI extends JFrame {
     List<Task> taskList = new ArrayList<Task>();
     taskList = dp.getTasks();
 
-    setLayout(new GridLayout(taskList.size(), 2));
+    setLayout(new GridLayout(taskList.size(), 3));
 
     for(int i = 0; i < taskList.size(); i++) {
       Task task = taskList.get(i);
+      String final_date = task.getFinalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
       
+      JPanel panel = new JPanel();  
+      panel.setBounds( 40 , 80 , 200 , 200 );    
+      panel.setBackground(Color.gray);  
+
       JLabel label_title = new JLabel(task.getTitle());
       JLabel label_description = new JLabel(task.getDescription());
+      JLabel label_final_date = new JLabel(final_date);
 
-      add(label_title);
-      add(label_description);
+      panel.add(label_title);
+      panel.add(label_description);
+      panel.add(label_final_date);
+
+      add(panel);
     }
   }
 }
