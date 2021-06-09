@@ -1,3 +1,5 @@
+package classes;
+
 public class Tag {
   private int tag_id;
   private String name;

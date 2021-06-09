@@ -1,3 +1,5 @@
+package classes;
+
 import java.time.LocalDateTime;
 
 public class Task {
@@ -32,8 +34,8 @@ public class Task {
     this.complete = complete;
   }
   
-  public void setTagId(int tag) {
-    this.tag = tag;
+  public void setTagId(int tag_id) {
+    this.tag_id = tag_id;
   }
 
   public int getId() {
@@ -54,10 +56,6 @@ public class Task {
 
   public boolean geComplete() {
     return complete;
-  }
-
-  public String getEndereco() {
-    return endereco;
   }
 
   public int getTagId() {
