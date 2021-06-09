@@ -8,7 +8,7 @@ import connectionFactory.ConnectionDb;
 
 public class TaskDAO {
 
-  public static List<Task> getTasks() {
+  public static List<Task> getTimeLine() {
     List<Task> tasks = new ArrayList<Task>();
 
     ResultSet rset = null;
@@ -17,7 +17,7 @@ public class TaskDAO {
 
     try {
       conn = ConnectionDb.createConnection();
-      pstm = conn.prepareStatement("SELECT * FROM task");
+      pstm = conn.prepareStatement("SELECT * FROM task ORDER BY final_date");
       rset = pstm.executeQuery();
 
       while (rset.next()) {

@@ -1,5 +1,6 @@
 package classes;
 
+import DAOs.TagsDAO;
 import java.time.LocalDateTime;
 
 public class Task {
@@ -60,5 +61,10 @@ public class Task {
 
   public int getTagId() {
     return tag_id;
+  }
+
+  public Tag getTag() {
+    TagsDAO tagDao = new TagsDAO();
+    return tagDao.getTagById(this.tag_id);
   }
 }
