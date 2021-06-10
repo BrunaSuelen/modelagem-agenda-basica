@@ -1,6 +1,6 @@
 package classes;
 
-import DAOs.TagsDAO;
+import DAOs.*;
 import java.time.LocalDateTime;
 
 public class Task {
@@ -8,10 +8,23 @@ public class Task {
   private String title;
   private String description;
   private LocalDateTime final_date;
-  private boolean complete;
+  private int complete;
   private int tag_id;
+  
+  private TagsDAO tagDao = new TagsDAO();
+  private TaskDAO taskDao = new TaskDAO();
 
-  public Task(String title, String description, LocalDateTime final_date, boolean complete, int tag_id) {
+
+  public Task(int task_id, String title, String description, LocalDateTime final_date, int complete, int tag_id) {
+    this.title = title;    
+    this.task_id = task_id;
+    this.description = description;
+    this.final_date = final_date;
+    this.complete = complete;
+    this.tag_id = tag_id;
+  }
+  
+  public Task(String title, String description, LocalDateTime final_date, int complete, int tag_id) {
     this.title = title;
     this.description = description;
     this.final_date = final_date;
@@ -31,7 +44,7 @@ public class Task {
     this.final_date = final_date;
   }
   
-  public void setComplete(boolean complete) {
+  public void setComplete(int complete) {
     this.complete = complete;
   }
   
@@ -55,7 +68,7 @@ public class Task {
     return final_date;
   }
 
-  public boolean geComplete() {
+  public int getComplete() {
     return complete;
   }
 
@@ -64,7 +77,10 @@ public class Task {
   }
 
   public Tag getTag() {
-    TagsDAO tagDao = new TagsDAO();
     return tagDao.getTagById(this.tag_id);
+  }
+  
+  public void createTask(Task task) {
+    taskDao.createTask(task);
   }
 }

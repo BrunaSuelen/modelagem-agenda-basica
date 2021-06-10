@@ -24,6 +24,7 @@ public class TagsDAO {
 
       while (rset.next()) {
         Tag tag = new Tag(
+          rset.getInt("tag_id"),
           rset.getString("name"),
           rset.getString("color")
         );
@@ -57,6 +58,7 @@ public class TagsDAO {
 
       if (rset.next()) {
         Tag tag = new Tag(
+          rset.getInt("tag_id"),
           rset.getString("name"),
           rset.getString("color")
         );

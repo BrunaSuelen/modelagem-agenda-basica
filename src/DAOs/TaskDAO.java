@@ -25,7 +25,7 @@ public class TaskDAO {
           rset.getString("title"),
           rset.getString("description"),
           rset.getTimestamp("final_date").toLocalDateTime(),
-          rset.getBoolean("complete"),
+          rset.getInt("complete"),
           rset.getInt("tag_id")
         );
         tasks.add(task);
@@ -44,5 +44,33 @@ public class TaskDAO {
     }
 
     return tasks;
+  }
+
+  public static void createTask(Task task) {
+    String keys = "(title, description, final_date, complete, tag_id)";
+    String sql = "INSERT INTO task " + keys + " VALUES ('"
+      + task.getTitle() + "', '" 
+      + task.getDescription() + "', '" 
+      + task.getFinalDate() + "', '"
+      + task.getComplete() + "', '"
+      + task.getTagId() + "');";
+
+    Connection conn = null;
+    PreparedStatement pstm = null;
+
+    try {
+      conn = ConnectionDb.createConnection();
+      pstm = conn.prepareStatement(sql);
+      pstm.execute();
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+      try {
+        if (pstm != null) pstm.close();
+        if (conn != null) conn.close();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
   }
 }
