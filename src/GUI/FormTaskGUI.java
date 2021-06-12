@@ -2,7 +2,6 @@ package GUI;
 
 import DAOs.*;
 import static GUI.TaskListGUI.array;
-import static GUI.TimeLineGUI.dp;
 import classes.Tag;
 import classes.Task;
 import java.time.LocalDateTime;
@@ -16,15 +15,23 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JTable;
 
-public class AddTaskGUI extends javax.swing.JFrame {
+public class FormTaskGUI extends javax.swing.JFrame {
     JMenu item_timeline, item_tags ,item_exit;
     TagsDAO tagsDAO = new TagsDAO();
     List<Tag> tagsList = new ArrayList<Tag>();
 
-    public AddTaskGUI() {
+    public FormTaskGUI() {
         initComponents();
         initCombobox();
-        initJFrame();
+        initJFrame("Criar Tarefa");
+        Menu();
+    }
+    
+    public FormTaskGUI(Task task) {
+        initComponents();
+        initJFrame("Editar Tarefa");
+        initCombobox();
+        initFieldsToEdition(task);
         Menu();
     }
     
@@ -204,8 +211,8 @@ public class AddTaskGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
               
-    public void initJFrame() {                
-        setTitle("Linha do Tempo");
+    public void initJFrame(String titlePage) {                
+        setTitle(titlePage);
         setSize(550, 450);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -213,6 +220,18 @@ public class AddTaskGUI extends javax.swing.JFrame {
         setVisible(true);
     }
      
+    public void initFieldsToEdition(Task task) {
+        LocalDateTime date = task.getFinalDate();
+        Tag tag = task.getTag();
+        
+        JTF_title.setText(task.getTitle());
+        JTA_description.setText(task.getDescription());
+        JCB_year.getModel().setSelectedItem(date.format(DateTimeFormatter.ofPattern("yyyy")));
+        JCB_month.getModel().setSelectedItem(date.format(DateTimeFormatter.ofPattern("MM")));
+        JCB_day.getModel().setSelectedItem(date.format(DateTimeFormatter.ofPattern("dd")));
+        JCB_tag.getModel().setSelectedItem(tag.getName());
+    }
+    
     public void Menu() {
         item_timeline = new JMenu("Linha do Tempo");  
         item_tags = new JMenu("Etiquetas");  
@@ -231,16 +250,9 @@ public class AddTaskGUI extends javax.swing.JFrame {
         
         for (int i = 0; i < tagsList.size(); i++) {
             Tag tag = tagsList.get(i);
-//            tags[i] = tag.getName();
             JCB_tag.addItem(tag.getName());
         }
-
-//        DefaultComboBoxModel model = new DefaultComboBoxModel(tags);
-//        JCB_tag = new JComboBox(model);
-//        JCB_tag.setSelectedIndex(-1);
-//        JCB_tag.addActionListener(this);
-//        add(JCB_tag);
-    }
+    } 
     
     public LocalDateTime getDate() {
         String dateTimeValue = JCB_year.getSelectedItem().toString() 
@@ -297,18 +309,18 @@ public class AddTaskGUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddTaskGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormTaskGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddTaskGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormTaskGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddTaskGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormTaskGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddTaskGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormTaskGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddTaskGUI().setVisible(true);
+                new FormTaskGUI().setVisible(true);
             }
         });
     }
