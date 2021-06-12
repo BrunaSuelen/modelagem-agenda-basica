@@ -16,8 +16,8 @@ public class Task {
 
 
   public Task(int task_id, String title, String description, LocalDateTime final_date, int complete, int tag_id) {
-    this.title = title;    
     this.task_id = task_id;
+    this.title = title;    
     this.description = description;
     this.final_date = final_date;
     this.complete = complete;
@@ -31,7 +31,11 @@ public class Task {
     this.complete = complete;
     this.tag_id = tag_id;
   }
-
+  
+  public void setId(int task_id) {
+    this.task_id = task_id;
+  }
+  
   public void setTitle(String title) {
     this.title = title;
   }
@@ -82,5 +86,9 @@ public class Task {
   
   public void createTask(Task task) {
     taskDao.createTask(task);
+  }
+  
+  public void updateTask(Task task) {
+    taskDao.updateTask(task);
   }
 }

@@ -22,6 +22,7 @@ public class TaskDAO {
 
       while (rset.next()) {
         Task task = new Task(
+          rset.getInt("task_id"),
           rset.getString("title"),
           rset.getString("description"),
           rset.getTimestamp("final_date").toLocalDateTime(),
@@ -73,4 +74,39 @@ public class TaskDAO {
       }
     }
   }
+
+    public static void updateTask(Task task) {
+        String sql = "UPDATE task SET "
+            + "title = '" + task.getTitle() + "', "
+            + "description = '" + task.getDescription() + "', " 
+            + "final_date = '" + task.getFinalDate() + "', " 
+            + "complete = " + task.getComplete() + ", "
+            + "tag_id = " + task.getTagId() + " " 
+            + "WHERE task_id = " + task.getId();
+    
+        Connection conn = null;
+        PreparedStatement pstm = null;
+
+        try {
+            conn = ConnectionDb.createConnection();
+            pstm = conn.prepareStatement(sql);
+            pstm.addBatch("SET FOREIGN_KEY_CHECKS=0");
+            pstm.executeBatch();
+            pstm.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstm != null) {
+                    pstm.close();
+                }
+
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

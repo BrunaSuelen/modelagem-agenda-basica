@@ -19,7 +19,10 @@ public class FormTaskGUI extends javax.swing.JFrame {
     JMenu item_timeline, item_tags ,item_exit;
     TagsDAO tagsDAO = new TagsDAO();
     List<Tag> tagsList = new ArrayList<Tag>();
+    boolean isEdition = false;    
+    int idTaskForEdition = 0;
 
+    
     public FormTaskGUI() {
         initComponents();
         initCombobox();
@@ -33,6 +36,8 @@ public class FormTaskGUI extends javax.swing.JFrame {
         initCombobox();
         initFieldsToEdition(task);
         Menu();
+        isEdition = true;
+        idTaskForEdition = task.getId();
     }
     
     @SuppressWarnings("unchecked")
@@ -264,7 +269,7 @@ public class FormTaskGUI extends javax.swing.JFrame {
         return dateTime;
     }
     
-    private void JB_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_saveActionPerformed
+    private Task getValuesForm() {
         String tagSelected = JCB_tag.getSelectedItem().toString();
         int tag_id = tagsList.get(0).getId();
         
@@ -283,8 +288,21 @@ public class FormTaskGUI extends javax.swing.JFrame {
             tag_id
         );
         
-        task.createTask(task);
-        TaskListGUI t = new TaskListGUI();
+        return task;
+    }
+    
+    private void JB_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_saveActionPerformed
+        Task task = getValuesForm();
+        TaskListGUI taskListGUI = new TaskListGUI();
+        
+        if (isEdition) {
+            task.setId(idTaskForEdition);
+            task.updateTask(task);
+        } 
+        else { 
+            task.createTask(task);
+        }
+        
         setVisible(false);
     }//GEN-LAST:event_JB_saveActionPerformed
 
