@@ -91,4 +91,8 @@ public class Task {
   public void updateTask(Task task) {
     taskDao.updateTask(task);
   }
+  
+  public void deleteTask(int task_id) {
+    taskDao.deleteTask(task_id);
+  }
 }

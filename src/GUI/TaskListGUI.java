@@ -47,6 +47,7 @@ public class TaskListGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
         JM_menu = new javax.swing.JMenuBar();
 
         jMenu1.setText("jMenu1");
@@ -56,7 +57,7 @@ public class TaskListGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(450, 500));
+        jPanel1.setPreferredSize(new java.awt.Dimension(450, 450));
 
         jPanel2.setBackground(new java.awt.Color(255, 154, 20));
         jPanel2.setPreferredSize(new java.awt.Dimension(8, 354));
@@ -97,12 +98,16 @@ public class TaskListGUI extends javax.swing.JFrame {
         jButton2.setForeground(new java.awt.Color(255, 154, 19));
         jButton2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 154, 19), 1, true));
         jButton2.setContentAreaFilled(false);
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton2.setLabel("+");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
+
+        jLabel2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabel2.setText("Selecione uma Atividade para ver mais detalhes");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -114,7 +119,8 @@ public class TaskListGUI extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addContainerGap(28, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -130,7 +136,9 @@ public class TaskListGUI extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel1)
-                        .addGap(26, 26, 26)
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel2)
+                        .addGap(36, 36, 36)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(125, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,7 +193,7 @@ public class TaskListGUI extends javax.swing.JFrame {
     
     public void initJFrame() {                
         setTitle("Linha do Tempo");
-        setSize(550, 450);
+        setSize(450, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -269,6 +277,7 @@ public class TaskListGUI extends javax.swing.JFrame {
     private javax.swing.JMenuBar JM_menu;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;

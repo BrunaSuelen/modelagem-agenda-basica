@@ -109,4 +109,33 @@ public class TaskDAO {
             }
         }
     }
+    
+    public static void deleteTask(int task_id) {
+        String sql = "DELETE FROM task WHERE task_id = " + task_id + ";";
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        
+
+        try {
+            conn = ConnectionDb.createConnection();
+            pstm = conn.prepareStatement(sql);
+            pstm.addBatch("SET FOREIGN_KEY_CHECKS=0");
+            pstm.executeBatch();
+            pstm.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstm != null) {
+                    pstm.close();
+                }
+
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
