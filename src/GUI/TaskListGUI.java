@@ -1,7 +1,6 @@
 package GUI;
 
-import static GUI.TimeLineGUI.array;
-import static GUI.TimeLineGUI.dp;
+import DAOs.TaskDAO;
 import GUI.*;
 import classes.Tag;
 import classes.Task;
@@ -17,9 +16,14 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class TaskListGUI extends javax.swing.JFrame {
     JMenu item_timeline, item_tags ,item_exit;
+    TaskDAO TaskDAO = new TaskDAO();
+    List<Task> taskList = new ArrayList<Task>();
     static String[] array = { "Titulo", "Descrição", "Data Final", "Etiqueta" };
     
     public TaskListGUI() {
@@ -28,6 +32,7 @@ public class TaskListGUI extends javax.swing.JFrame {
         Menu();
         addTask();
         getTaskList();
+        initTableSelectionListener();
     }
     
     @SuppressWarnings("unchecked")
@@ -126,7 +131,7 @@ public class TaskListGUI extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jLabel1)
                         .addGap(26, 26, 26)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(125, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -158,10 +163,26 @@ public class TaskListGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        AddTaskGUI t = new AddTaskGUI();
+        FormTaskGUI t = new FormTaskGUI();
         setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void initTableSelectionListener() {                
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+
+                if(!lsm.isSelectionEmpty()){
+                  int rowSel = jTable1.getSelectedRow();//pega o indice da linha na tabela
+//                  int indexRowModel = jTable1.getRowSorter().convertRowIndexToModel(rowSel);
+                    Task taskSelected = taskList.get(rowSel);
+                    FormTaskGUI t = new FormTaskGUI(taskSelected);
+                    setVisible(false);
+                }               
+            }
+        });
+    }
+    
     public void initJFrame() {                
         setTitle("Linha do Tempo");
         setSize(550, 450);
@@ -184,8 +205,7 @@ public class TaskListGUI extends javax.swing.JFrame {
     }
     
     public void getTaskList() {
-        List<Task> taskList = new ArrayList<Task>();
-        taskList = dp.getTimeLine();
+        taskList = TaskDAO.getTimeLine();
         
         setLayout(new GridLayout(taskList.size(), 4));
         
