@@ -6,7 +6,6 @@
 package GUI;
 
 import DAOs.TagsDAO;
-import static GUI.TagListGUI.array;
 import classes.Tag;
 import classes.Task;
 import java.awt.event.ActionEvent;
@@ -21,10 +20,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-/**
- *
- * @author meuLe
- */
 public class TagGUI extends javax.swing.JFrame {
     JMenuItem item_timeline, item_tags ,item_exit;
     TagsDAO tagDAO = new TagsDAO();
@@ -84,7 +79,7 @@ public class TagGUI extends javax.swing.JFrame {
         
         item_tags = new JMenuItem(new AbstractAction("Etiquetas") {
             public void actionPerformed(ActionEvent e) {
-                TagListGUI tagGUI = new TagListGUI();
+                TagGUI tagGUI = new TagGUI();
                 setVisible(false);
             }
         });

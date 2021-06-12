@@ -1,7 +1,9 @@
 package GUI;
 
 import DAOs.TagsDAO;
+import DAOs.TaskDAO;
 import classes.Tag;
+import classes.Task;
 import java.awt.event.ActionEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,14 +24,14 @@ public class FormTagGUI extends javax.swing.JFrame {
     public FormTagGUI() {
         initComponents();
         initJFrame("Criar Etiqueta");
-        Menu();
+        menu();
     }
     
     public FormTagGUI(Tag tag) {
         initComponents();
         initJFrame("Editar Etiqueta");
         initFieldsToEdition(tag);
-        Menu();
+        menu();
         isEdition = true;
         idTagForEdition = tag.getId();
         JB_cancel_or_delete1.setText("Excluir");
@@ -42,6 +44,7 @@ public class FormTagGUI extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
+        errorTag.setVisible(false);
     }
      
     public void initFieldsToEdition(Tag tag) {
@@ -49,8 +52,8 @@ public class FormTagGUI extends javax.swing.JFrame {
         JTColor.setText(tag.getColor());
     }
     
-    public void Menu() {
-        MenuActions();
+    public void menu() {
+        menuActions();
         
         jMenuBar1.add(item_timeline);
         jMenuBar1.add(item_tags);
@@ -59,7 +62,7 @@ public class FormTagGUI extends javax.swing.JFrame {
         setJMenuBar(jMenuBar1);        
     }
     
-    public void MenuActions() { 
+    public void menuActions() { 
         item_timeline = new JMenuItem(new AbstractAction("Linha do Tempo") {
             public void actionPerformed(ActionEvent e) {
                 TaskListGUI taskListGUI = new TaskListGUI();
@@ -69,7 +72,7 @@ public class FormTagGUI extends javax.swing.JFrame {
         
         item_tags = new JMenuItem(new AbstractAction("Etiquetas") {
             public void actionPerformed(ActionEvent e) {
-                TagListGUI tagGUI = new TagListGUI();
+                TagGUI tagGUI = new TagGUI();
                 setVisible(false);
             }
         });
@@ -81,6 +84,19 @@ public class FormTagGUI extends javax.swing.JFrame {
         });
     }
     
+    public void removeValidation(Tag tag) {        
+        List<Task> taskList = new ArrayList<Task>();
+        taskList = TaskDAO.getTaskByTag(idTagForEdition);
+        if (taskList.isEmpty()) {
+            tag.deleteTag(idTagForEdition);
+            errorTag.setVisible(false);
+            TagGUI tagListGUI = new TagGUI();
+            setVisible(false);
+        }else {
+            errorTag.setVisible(true);
+        }
+    }
+            
     private Tag getValuesForm() {        
         Tag tag = new Tag(
             JTName.getText(),
@@ -104,6 +120,9 @@ public class FormTagGUI extends javax.swing.JFrame {
         JTColor = new javax.swing.JTextField();
         JB_cancel_or_delete1 = new javax.swing.JButton();
         JB_save1 = new javax.swing.JButton();
+        errorDeteteTag = new javax.swing.JLabel();
+        errorTag = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         JB_cancel_or_delete.setBackground(new java.awt.Color(255, 0, 0));
@@ -178,43 +197,78 @@ public class FormTagGUI extends javax.swing.JFrame {
             }
         });
 
+        errorDeteteTag.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
+        errorDeteteTag.setForeground(new java.awt.Color(255, 0, 0));
+
+        errorTag.setFont(new java.awt.Font("Poppins", 1, 11)); // NOI18N
+        errorTag.setForeground(new java.awt.Color(255, 0, 0));
+        errorTag.setText("Está etiqueta está em uso, por favor remova suas referências");
+
+        jPanel3.setBackground(new java.awt.Color(255, 154, 20));
+        jPanel3.setPreferredSize(new java.awt.Dimension(8, 354));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 354, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(70, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(JB_cancel_or_delete1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(JB_save1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(titleColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(JTColor, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1)
-                        .addComponent(titleName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(JTName, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(50, 50, 50))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(errorDeteteTag)
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(JB_cancel_or_delete1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(JB_save1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(titleColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(JTColor, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(titleName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(JTName, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel1)
+                    .addComponent(errorTag))
+                .addGap(42, 42, 42))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(titleName, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(JTName, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(titleColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(JTColor, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(74, 74, 74)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JB_save1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(JB_cancel_or_delete1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(162, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(errorDeteteTag))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addComponent(jLabel1)
+                        .addGap(6, 6, 6)
+                        .addComponent(errorTag, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
+                        .addComponent(titleName, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)
+                        .addComponent(JTName, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(titleColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)
+                        .addComponent(JTColor, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(JB_save1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(JB_cancel_or_delete1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
 
         setJMenuBar(jMenuBar1);
@@ -242,10 +296,12 @@ public class FormTagGUI extends javax.swing.JFrame {
     private void JB_cancel_or_delete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_cancel_or_delete1ActionPerformed
         Tag tag = getValuesForm();
 
-        if (isEdition) { tag.deleteTag(idTagForEdition); }
-
-        TagGUI tagListGUI = new TagGUI();
-        setVisible(false);
+        if (isEdition) { 
+            removeValidation(tag);
+        } else {
+            TagGUI tagListGUI = new TagGUI();
+            setVisible(false);
+        }
     }//GEN-LAST:event_JB_cancel_or_delete1ActionPerformed
 
     private void JB_save1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JB_save1ActionPerformed
@@ -306,9 +362,12 @@ public class FormTagGUI extends javax.swing.JFrame {
     private javax.swing.JButton JB_save1;
     private javax.swing.JTextField JTColor;
     private javax.swing.JTextField JTName;
+    private javax.swing.JLabel errorDeteteTag;
+    private javax.swing.JLabel errorTag;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
     private java.awt.Label titleColor;
     private java.awt.Label titleName;
     // End of variables declaration//GEN-END:variables

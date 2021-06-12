@@ -8,8 +8,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class TagsDAO {
+    
     public static List<Tag> getTags() {
       List<Tag> tags = new ArrayList<Tag>();
 
@@ -78,7 +78,7 @@ public class TagsDAO {
 
       return null;
     }
-
+    
     public static void createTag(Tag tag) {
     String keys = "(name, color)";
     String sql = "INSERT INTO tag " + keys + " VALUES ('"

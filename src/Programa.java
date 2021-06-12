@@ -7,9 +7,9 @@ import GUI.*;
 
 public class Programa{
 
-	static Scanner t = new Scanner(System.in);
-	static TaskDAO dp = new TaskDAO();
-	static String n = "";
+//	static Scanner t = new Scanner(System.in);
+//	static TaskDAO dp = new TaskDAO();
+//	static String n = "";
 	
 	public static void main(String args[]) {
 //		lista();

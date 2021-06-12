@@ -1,7 +1,7 @@
 package GUI;
 
 import DAOs.*;
-import GUI.TagListGUI;
+import GUI.*;
 import classes.Tag;
 import classes.Task;
 import java.awt.GridLayout;
@@ -80,7 +80,6 @@ public class TaskListGUI extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(51, 51, 51));
         jLabel1.setText("Linha do Tempo");
 
-        jTable1.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -92,8 +91,6 @@ public class TaskListGUI extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable1.setCellSelectionEnabled(true);
-        jTable1.setRowHeight(50);
         jScrollPane1.setViewportView(jTable1);
 
         jButton2.setBackground(new java.awt.Color(255, 154, 19));
@@ -102,7 +99,6 @@ public class TaskListGUI extends javax.swing.JFrame {
         jButton2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 154, 19), 1, true));
         jButton2.setContentAreaFilled(false);
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton2.setEnabled(false);
         jButton2.setLabel("+");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

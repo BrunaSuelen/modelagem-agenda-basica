@@ -255,7 +255,9 @@ public class FormTaskGUI extends javax.swing.JFrame {
         JCB_year.getModel().setSelectedItem(date.format(DateTimeFormatter.ofPattern("yyyy")));
         JCB_month.getModel().setSelectedItem(date.format(DateTimeFormatter.ofPattern("MM")));
         JCB_day.getModel().setSelectedItem(date.format(DateTimeFormatter.ofPattern("dd")));
-        JCB_tag.getModel().setSelectedItem(tag.getName());
+        if (tag != null) {
+            JCB_tag.getModel().setSelectedItem(tag.getName());
+        }
     }
     
     public void Menu() {
@@ -278,7 +280,7 @@ public class FormTaskGUI extends javax.swing.JFrame {
         
         item_tags = new JMenuItem(new AbstractAction("Etiquetas") {
             public void actionPerformed(ActionEvent e) {
-                TagListGUI tagGUI = new TagListGUI();
+                TagGUI tagGUI = new TagGUI();
                 setVisible(false);
             }
         });
