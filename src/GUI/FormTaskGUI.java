@@ -4,19 +4,22 @@ import DAOs.*;
 import static GUI.TaskListGUI.array;
 import classes.Tag;
 import classes.Task;
+import java.awt.event.ActionEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JTable;
 
 public class FormTaskGUI extends javax.swing.JFrame {
-    JMenu item_timeline, item_tags ,item_exit;
+    JMenuItem item_timeline, item_tags ,item_exit;
     TagsDAO tagsDAO = new TagsDAO();
     List<Tag> tagsList = new ArrayList<Tag>();
     boolean isEdition = false;    
@@ -256,15 +259,35 @@ public class FormTaskGUI extends javax.swing.JFrame {
     }
     
     public void Menu() {
-        item_timeline = new JMenu("Linha do Tempo");  
-        item_tags = new JMenu("Etiquetas");  
-        item_exit = new JMenu("Sair");
-
+        MenuActions();
+        
         jMenuBar1.add(item_timeline);
         jMenuBar1.add(item_tags);
         jMenuBar1.add(item_exit);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(jMenuBar1);        
+    }
+    
+    public void MenuActions() { 
+        item_timeline = new JMenuItem(new AbstractAction("Linha do Tempo") {
+            public void actionPerformed(ActionEvent e) {
+                TaskListGUI taskListGUI = new TaskListGUI();
+                setVisible(false);
+            }
+        }); 
+        
+        item_tags = new JMenuItem(new AbstractAction("Etiquetas") {
+            public void actionPerformed(ActionEvent e) {
+                TagListGUI tagGUI = new TagListGUI();
+                setVisible(false);
+            }
+        });
+        
+        item_exit = new JMenuItem(new AbstractAction("Sair") {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
     }
     
     public void initCombobox() {

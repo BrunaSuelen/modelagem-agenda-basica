@@ -14,7 +14,6 @@ public class Task {
   private TagsDAO tagDao = new TagsDAO();
   private TaskDAO taskDao = new TaskDAO();
 
-
   public Task(int task_id, String title, String description, LocalDateTime final_date, int complete, int tag_id) {
     this.task_id = task_id;
     this.title = title;    

@@ -1,19 +1,22 @@
 package GUI;
 
-import DAOs.TaskDAO;
-import GUI.*;
+import DAOs.*;
+import GUI.TagListGUI;
 import classes.Tag;
 import classes.Task;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -21,7 +24,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 public class TaskListGUI extends javax.swing.JFrame {
-    JMenu item_timeline, item_tags ,item_exit;
+    JMenuItem item_timeline, item_tags ,item_exit;
     TaskDAO TaskDAO = new TaskDAO();
     List<Task> taskList = new ArrayList<Task>();
     static String[] array = { "Titulo", "Descrição", "Data Final", "Etiqueta" };
@@ -99,6 +102,7 @@ public class TaskListGUI extends javax.swing.JFrame {
         jButton2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 154, 19), 1, true));
         jButton2.setContentAreaFilled(false);
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton2.setEnabled(false);
         jButton2.setLabel("+");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -106,7 +110,6 @@ public class TaskListGUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jLabel2.setText("Selecione uma Atividade para ver mais detalhes");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -181,8 +184,7 @@ public class TaskListGUI extends javax.swing.JFrame {
                 ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 
                 if(!lsm.isSelectionEmpty()){
-                  int rowSel = jTable1.getSelectedRow();//pega o indice da linha na tabela
-//                  int indexRowModel = jTable1.getRowSorter().convertRowIndexToModel(rowSel);
+                    int rowSel = jTable1.getSelectedRow();
                     Task taskSelected = taskList.get(rowSel);
                     FormTaskGUI t = new FormTaskGUI(taskSelected);
                     setVisible(false);
@@ -201,21 +203,40 @@ public class TaskListGUI extends javax.swing.JFrame {
     }
     
     public void Menu() {
-        item_timeline = new JMenu("Linha do Tempo");  
-        item_tags = new JMenu("Etiquetas");  
-        item_exit = new JMenu("Sair");
-
+        MenuActions();
+        
         JM_menu.add(item_timeline);
         JM_menu.add(item_tags);
         JM_menu.add(item_exit);
 
-        setJMenuBar(JM_menu);
+        setJMenuBar(JM_menu);        
+    }
+    
+    public void MenuActions() { 
+        item_timeline = new JMenuItem(new AbstractAction("Linha do Tempo") {
+            public void actionPerformed(ActionEvent e) {
+                
+            }
+        }); 
+        
+        item_tags = new JMenuItem(new AbstractAction("Etiquetas") {
+            public void actionPerformed(ActionEvent e) {
+                TagGUI tagGUI = new TagGUI();
+                setVisible(false);
+            }
+        });
+        
+        item_exit = new JMenuItem(new AbstractAction("Sair") {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
     }
     
     public void getTaskList() {
         taskList = TaskDAO.getTimeLine();
         
-        setLayout(new GridLayout(taskList.size(), 4));
+//        setLayout(new GridLayout(taskList.size(), 4));
         
         Object[][] tableList = new Object[taskList.size()][4];
         for (int i = 0; i < taskList.size(); i++) {
@@ -223,9 +244,9 @@ public class TaskListGUI extends javax.swing.JFrame {
             String final_date = task.getFinalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
             Tag tag = task.getTag();
             
-            tableList[i][0] = task.getTitle().toUpperCase();
-            tableList[i][1] = task.getDescription().toUpperCase();
-            tableList[i][2] = final_date.toUpperCase();
+            tableList[i][0] = task.getTitle();
+            tableList[i][1] = task.getDescription();
+            tableList[i][2] = final_date;
             
             if(tag != null) {
               tableList[i][3] = tag.getName();
